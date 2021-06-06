@@ -1,9 +1,9 @@
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../type/type'
 import { parseHeaders } from '../helpers/headers'
-import { error } from 'shelljs'
+
+
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
-
-
+    
     return new Promise((resolve, reject) => {
 
         // 拿到对应参数
@@ -19,8 +19,10 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
             request.timeout = timeout
         }
 
+
         // 请求方式(转换成大写) 请求链接  是否异步
-        request.open(method.toUpperCase(), url, true)
+        request.open(method.toUpperCase(), url!, true)
+
 
 
         Object.keys(headers).forEach(name => {
@@ -37,9 +39,13 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         // 发送
         request.send(data)
 
+
         // 处理响应的结果
         request.onreadystatechange = function () {
 
+            if (request.status === 0) {
+                return
+            }
             // 不等于4 则发送失败 返回
             if (request.readyState !== 4) {
                 return
@@ -57,10 +63,9 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
                 headers: responseHeaders,
                 config,
                 request
-
             }
             // 返回
-            resolve(response)
+            handleResponse(response)
         }
 
         // 处理错误结果
@@ -72,6 +77,16 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         request.ontimeout = function () {
             // 提示错误
             reject(new Error(`time of ${timeout} ms exceeded`))
+        }
+
+
+        // 处理成功结果
+        function handleResponse(response: AxiosResponse): void {
+            if (response.status >= 200 && response.status < 300) {
+                resolve(response)
+            } else {
+                reject(new Error(`请求失败捕获的失败信息${response.status}`))
+            }
         }
 
     })

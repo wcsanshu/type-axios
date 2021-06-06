@@ -11,6 +11,7 @@ function encode(val: string): string {
         .replace(/%5D/gi, ']')
 }
 
+
 // 处理拼接 url跟get的参数
 export function bulidURL(url: string, params?: any): string {
     if (!params) {
@@ -32,11 +33,9 @@ export function bulidURL(url: string, params?: any): string {
         if (Array.isArray(val)) {
             values = val
             key += "[]"
-            console.log("key", key)
         } else {
             // 统一转换为数组 然后去遍历
             values = [val]
-            console.log("看我转换数组",values)
         }
         // 开始遍历 数组params 
         values.forEach(val => {
@@ -55,11 +54,9 @@ export function bulidURL(url: string, params?: any): string {
 
     // 上方遍历完成后转换为字符串
     let serializedParams = parts.join('&')
-    console.log("serializedParams", serializedParams)
     // 继续判断是否存在
     if (serializedParams) {
         // 查看url 里面是否有哈希值 也就是路径
-        console.log("url", url)
         const markIndex = url.indexOf("#")
         // 如果有的话
         if (markIndex !== -1) {

@@ -1,10 +1,10 @@
-import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './type/type'
-import xhr from './xhr/xhr'
-import { bulidURL } from './helpers/url'
-import { transfromRequest, tranformResponse } from '../src/helpers/data'
-import { processHeaders } from './helpers/headers'
+import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../type/type'
+import xhr from '../xhr/xhr'
+import { bulidURL } from '../helpers/url'
+import { transfromRequest, tranformResponse } from '../helpers/data'
+import { processHeaders } from '../helpers/headers'
 
-function axios(config: AxiosRequestConfig): AxiosPromise {
+export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
     // 发送请求前 先调用 处理url
     processConfig(config)
     // 拿到处理好的参数 然后提交请求
@@ -50,5 +50,3 @@ export function transfromResponseData(res: AxiosResponse): AxiosResponse {
     res.data = tranformResponse(res.data)
     return res
 }
-
-export default axios
