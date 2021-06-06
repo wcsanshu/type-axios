@@ -1,10 +1,27 @@
 import { AxiosRequestConfig, AxiosPromise, Method } from './../type/type';
 import dispatchRequest from '../core/dispatchRequest'
-import { config } from 'shelljs';
 
 export default class Axios {
     //请求函数的实现(主要的请求方式)
-    request(config: AxiosRequestConfig): AxiosPromise {
+    request(url: any, config?: any): AxiosPromise {
+        /**
+         * 这里主要让 抛出去的axios 有两种模式
+         * 第一种 只传递一个参数 
+         * 第二种 可以传递两个参数 url + {} 一个对象
+         */
+        // 如果url等于string 则说明传递了 两个参数 
+        if (typeof url === "string") {
+            // 如果有config 
+            if (config) {
+                // 则把config里的url 改成传递过来的url 就是第一个参数
+                config.url = url
+            }
+        } else {
+            // 否则 说明值传递了 一个参数 就是config 
+            //由于上面设置了两个参数 所以这时的url是config  config则是空
+            //所以 需要把 url赋值到config 
+            config = url
+        }
         return dispatchRequest(config)
     }
 
