@@ -59,3 +59,13 @@ export interface AxiosInstance extends Axios {
     (config: AxiosRequestConfig): AxiosPromise
     (url: string, config: AxiosRequestConfig): AxiosPromise
 }
+
+// 需要泛型 因为 请求拦截器 跟响应拦截器是两种类型
+export interface ResolvedFn<T> {
+    (val: T): T | Promise<T>
+}
+
+export interface AxiosInterCeptorManager {
+    // 有一个use方法  两个参数都是函数类型
+    use(resolved, rejected)
+}
